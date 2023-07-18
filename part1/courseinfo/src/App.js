@@ -6,7 +6,7 @@ const Part = (props) => {
   return (
     <>
       <p>
-        The part name is {props.name} and number of excersices is
+        The part name is {props.name} and number of excersices is{' '}
         {props.excercise}
       </p>
     </>
@@ -16,9 +16,9 @@ const Part = (props) => {
 const Content = (props) => {
   return (
     <>
-      <Part name={props.name1} excercise={props.excercise1} />
-      <Part name={props.name2} excercise={props.excercise2} />
-      <Part name={props.name3} excercise={props.excercise3} />
+      {props.partsArray.map((item, i) => (
+        <Part key={i} name={item.name} excercise={item.exc} />
+      ))}
     </>
   )
 }
@@ -34,19 +34,19 @@ const App = () => {
   const part2 = 'Using props to pass data'
   const exercises2 = 7
   const part3 = 'State of a component'
-  const exercises3 = 14
+  const exercises3 = 104
+
+  const partsArray = [
+    { name: part1, exc: exercises1 },
+    { name: part2, exc: exercises2 },
+    { name: part3, exc: exercises3 },
+    { name: 'raghad', exc: 8 },
+  ]
 
   return (
     <div>
       <Header name={course} />
-      <Content
-        name1={part1}
-        excercise1={exercises1}
-        name2={part2}
-        excercise2={exercises2}
-        name3={part3}
-        excercise3={exercises3}
-      />
+      <Content partsArray={partsArray} />
       <Total number={exercises1 + exercises2 + exercises3} />
     </div>
   )
