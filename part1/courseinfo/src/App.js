@@ -24,11 +24,10 @@ const Content = (props) => {
 }
 
 const Total = (props) => {
-  let sum = 0
-  props.parts.forEach((element) => {
-    sum += element.exercises
-  })
-  return <p>The total number of excersices is {sum} </p>
+  const summation = props.parts.reduce((sum, element) => {
+    return (sum += element.exercises)
+  }, 0)
+  return <p>The total number of excersices is {summation} </p>
 }
 
 const App = () => {
