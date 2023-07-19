@@ -8,6 +8,7 @@ const Hello = (props) => {
     </div>
   )
 }
+
 const Footer = () => {
   return (
     <div>
@@ -30,6 +31,7 @@ const App = () => {
       <p>{friends[1].name} {friends[1].age}</p>
       <p>{fri}</p>
       <Hello name ='raghad'/>
+      <Footer/>
     </div>
   )
 }
