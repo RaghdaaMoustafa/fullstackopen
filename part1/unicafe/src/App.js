@@ -1,5 +1,23 @@
 import { useState } from 'react'
 
+const MyTable = (props) => {
+  return (
+    <table>
+      <tbody>
+        {Object.keys(props).map((element) => (
+          <tr>
+            <td>{element}</td>
+            <td>{props[element]}</td>
+            <td>Flor</td>
+            <td>Ella</td>
+            <td>Juan</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
 const StatisticLine = ({ category, text }) => {
   return (
     <div>
@@ -16,9 +34,16 @@ const Statistics = (props) => {
   console.log(Object.keys(props))
   return (
     <>
-      {Object.keys(props).map((item, i) => (
-        <StatisticLine key={i} category={props[item]} text={item} />
-      ))}
+      <table>
+        {Object.keys(props).map((item) => (
+          <tbody>
+            <tr>
+              <td>{item}</td>
+              <td>{props[item]}</td>
+            </tr>
+          </tbody>
+        ))}
+      </table>
     </>
   )
 }
