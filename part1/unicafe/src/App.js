@@ -35,8 +35,8 @@ const Statistics = (props) => {
   return (
     <>
       <table>
-        {Object.keys(props).map((item) => (
-          <tbody>
+        {Object.keys(props).map((item, i) => (
+          <tbody key={i}>
             <tr>
               <td>{item}</td>
               <td>{props[item]}</td>
