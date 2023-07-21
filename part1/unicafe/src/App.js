@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Display = ({ category, text }) => {
+const StatisticLine = ({ category, text }) => {
   return (
     <div>
       {text} {category}
@@ -14,12 +14,12 @@ const Statistics = (props) => {
   return (
     // const statistics=props.items.map((element)=>{<StatEntry category={element} text=})
     <>
-      <Display category={props.good} text="good " />
-      <Display category={props.neutral} text="neutral " />
-      <Display category={props.bad} text="bad " />
-      <Display category={props.total} text="all " />
-      <Display category={props.average} text="average " />
-      <Display category={props.positive} text="positive " />
+      <StatisticLine category={props.good} text="good " />
+      <StatisticLine category={props.neutral} text="neutral " />
+      <StatisticLine category={props.bad} text="bad " />
+      <StatisticLine category={props.total} text="all " />
+      <StatisticLine category={props.average} text="average " />
+      <StatisticLine category={props.positive} text="positive " />
     </>
   )
 }
