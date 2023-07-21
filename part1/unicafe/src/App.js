@@ -8,21 +8,21 @@ const StatisticLine = ({ category, text }) => {
   )
 }
 const Statistics = (props) => {
-  if (props.good === 0 && props.bad === 0 && props.neutral === 0) {
+  if (!(props.good || props.bad || props.neutral) ) {
     return <div>No feedback given</div>
   }
+
+  console.log(Object.keys(props))
   return (
-    // const statistics=props.items.map((element)=>{<StatEntry category={element} text=})
     <>
-      <StatisticLine category={props.good} text="good " />
-      <StatisticLine category={props.neutral} text="neutral " />
-      <StatisticLine category={props.bad} text="bad " />
-      <StatisticLine category={props.total} text="all " />
-      <StatisticLine category={props.average} text="average " />
-      <StatisticLine category={props.positive} text="positive " />
+      {Object.keys(props).map(
+        (item,i)=> <StatisticLine key={i} category={props[item]} text={item} /> 
+      )}
     </>
   )
 }
+
+
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
 )
