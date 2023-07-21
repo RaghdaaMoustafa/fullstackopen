@@ -8,20 +8,20 @@ const StatisticLine = ({ category, text }) => {
   )
 }
 const Statistics = (props) => {
-  if (!(props.good || props.bad || props.neutral) ) {
+  // some(cb fn) , every(cb fn) -> boolean
+  if (!(props.good || props.bad || props.neutral)) {
     return <div>No feedback given</div>
   }
 
   console.log(Object.keys(props))
   return (
     <>
-      {Object.keys(props).map(
-        (item,i)=> <StatisticLine key={i} category={props[item]} text={item} /> 
-      )}
+      {Object.keys(props).map((item, i) => (
+        <StatisticLine key={i} category={props[item]} text={item} />
+      ))}
     </>
   )
 }
-
 
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
@@ -38,7 +38,12 @@ const App = () => {
     return (a + b + c) / 3
   }
   const positive = (good, neutral, total) => {
-    return `${(good + neutral) / total} %`
+    return `${(((good + neutral) / total) * 100).toFixed(2)} %`
+  }
+  const total = (items) => {
+    return Object.values(items).reduce((sum, item) => {
+      return (sum += item)
+    }, 0)
   }
 
   return (
@@ -52,19 +57,12 @@ const App = () => {
         good={good}
         neutral={neutral}
         bad={bad}
-        total={<Total items={{ good, neutral, bad }} />}
+        total={total({ good, neutral, bad })}
         average={average(good, neutral, bad)}
-        positive={positive(good, neutral, good + neutral + bad)}
+        positive={positive(good, neutral, total({ good, neutral, bad }))}
       />
     </div>
   )
 }
 
 export default App
-
-const Total = ({ items }) => {
-  return Object.values(items).reduce((sum, item) => {
-    return (sum += item)
-  }, 0)
-  // console.log(total)
-}
