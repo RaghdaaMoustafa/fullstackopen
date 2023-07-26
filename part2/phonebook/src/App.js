@@ -34,13 +34,15 @@ const App = () => {
       ) {
         personService
           .update(checkRepeated.id, phoneObject)
-          .then((returnedPerson) =>
+          .then((returnedPerson) => {
             setPersons(
               persons.map((person) =>
                 person.id !== checkRepeated.id ? person : returnedPerson
               )
             )
-          )
+            setNewName('')
+            setNewNumber('')
+          })
       }
       return
     }
