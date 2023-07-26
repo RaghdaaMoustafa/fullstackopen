@@ -35,6 +35,17 @@ const App = () => {
       setNewNumber('')
     })
   }
+  const whenDelete = (id, person) => {
+    if (window.confirm(`Delete ${person} ? `)) {
+      personService.deleteRequest(id).then((returnedPersons) => {
+        setPersons(
+          persons.filter((element) => {
+            return id !== element.id
+          })
+        )
+      })
+    }
+  }
   const handleInputName = (event) => {
     setNewName(event.target.value)
   }
@@ -62,7 +73,13 @@ const App = () => {
       />
       <h2>Numbers</h2>
       <ul>
-        <Persons personsToShow={personsToShow} />
+        {personsToShow.map((person) => (
+          <Persons
+            key={person.id}
+            person={person}
+            deletePerson={() => whenDelete(person.id, person.name)}
+          />
+        ))}
       </ul>
     </div>
   )

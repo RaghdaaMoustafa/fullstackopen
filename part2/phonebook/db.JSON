@@ -11,11 +11,6 @@
       "id": 2
     },
     {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": 4
@@ -24,31 +19,6 @@
       "name": "raghad",
       "number": "",
       "id": 5
-    },
-    {
-      "name": "meqdad",
-      "number": "010234567",
-      "id": 6
-    },
-    {
-      "name": "2at2at",
-      "number": "012",
-      "id": 7
-    },
-    {
-      "name": "samar",
-      "number": "015",
-      "id": 8
-    },
-    {
-      "name": "mahmoud",
-      "number": "01098",
-      "id": 9
-    },
-    {
-      "name": "yousef",
-      "number": "01345",
-      "id": 10
     }
   ]
 }
