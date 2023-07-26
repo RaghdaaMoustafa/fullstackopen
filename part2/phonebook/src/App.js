@@ -5,11 +5,20 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return <div className="error">{message}</div>
+}
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filtered, setFiltered] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+
   useEffect(() => {
     personService.getAll().then((intialPersons) => {
       setPersons(intialPersons)
@@ -42,6 +51,10 @@ const App = () => {
             )
             setNewName('')
             setNewNumber('')
+            setErrorMessage(`${returnedPerson.name} contact is updated`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           })
       }
       return
@@ -50,6 +63,10 @@ const App = () => {
       setPersons(persons.concat(returnedPerson))
       setNewName('')
       setNewNumber('')
+      setErrorMessage(`Added ${returnedPerson.name}`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     })
   }
   const whenDelete = (id, person) => {
@@ -79,6 +96,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter value={filtered} handleFilter={handleFilter} />
       <h2>add a new</h2>
       <PersonForm
