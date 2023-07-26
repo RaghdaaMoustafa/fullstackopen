@@ -5,19 +5,21 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
-const Notification = ({ message }) => {
+const Notification = ({ message, nameClass }) => {
   if (message === null) {
     return null
   }
+  console.log(nameClass)
 
-  return <div className="error">{message}</div>
+  return <div className={nameClass}>{message}</div>
 }
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filtered, setFiltered] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [nameClass, setNameClass] = useState(null)
 
   useEffect(() => {
     personService.getAll().then((intialPersons) => {
@@ -51,9 +53,19 @@ const App = () => {
             )
             setNewName('')
             setNewNumber('')
-            setErrorMessage(`${returnedPerson.name} contact is updated`)
+            setNameClass('success')
+            setSuccessMessage(`${returnedPerson.name} contact is updated`)
             setTimeout(() => {
-              setErrorMessage(null)
+              setSuccessMessage(null)
+            }, 5000)
+          })
+          .catch((error) => {
+            setNameClass('fail')
+            setSuccessMessage(
+              `Information of ${phoneObject.name} has already been removed from server `
+            )
+            setTimeout(() => {
+              setSuccessMessage(null)
             }, 5000)
           })
       }
@@ -63,9 +75,10 @@ const App = () => {
       setPersons(persons.concat(returnedPerson))
       setNewName('')
       setNewNumber('')
-      setErrorMessage(`Added ${returnedPerson.name}`)
+      setNameClass('success')
+      setSuccessMessage(`Added ${returnedPerson.name}`)
       setTimeout(() => {
-        setErrorMessage(null)
+        setSuccessMessage(null)
       }, 5000)
     })
   }
@@ -96,7 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification message={successMessage} nameClass={nameClass} />
       <Filter value={filtered} handleFilter={handleFilter} />
       <h2>add a new</h2>
       <PersonForm

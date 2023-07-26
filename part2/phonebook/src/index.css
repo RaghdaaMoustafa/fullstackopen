@@ -1,5 +1,14 @@
-.error {
-  color: rgb(255, 0, 200);
+.success {
+  color: rgb(83, 117, 5);
+  background: rgb(255, 255, 255);
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.fail {
+  color: rgb(184, 8, 8);
   background: rgb(255, 255, 255);
   font-size: 20px;
   border-style: solid;
