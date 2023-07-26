@@ -21,12 +21,27 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
+
     const checkRepeated = persons.find((element) => element.name === newName)
     console.log(persons)
     console.log(checkRepeated)
 
     if (checkRepeated) {
-      alert(`${newName} is already added to phonebook`)
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook,replace the old number with a new one?`
+        )
+      ) {
+        personService
+          .update(checkRepeated.id, phoneObject)
+          .then((returnedPerson) =>
+            setPersons(
+              persons.map((person) =>
+                person.id !== checkRepeated.id ? person : returnedPerson
+              )
+            )
+          )
+      }
       return
     }
     personService.create(phoneObject).then((returnedPerson) => {
@@ -37,7 +52,7 @@ const App = () => {
   }
   const whenDelete = (id, person) => {
     if (window.confirm(`Delete ${person} ? `)) {
-      personService.deleteRequest(id).then((returnedPersons) => {
+      personService.deleteRequest(id).then(() => {
         setPersons(
           persons.filter((element) => {
             return id !== element.id
