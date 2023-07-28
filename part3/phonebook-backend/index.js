@@ -62,8 +62,14 @@ app.post('/api/persons', (request, response) => {
     name: body.name,
     number: body.number,
   }
-  phones = phones.concat(person)
-  response.json(person)
+  const checkRepeated = phones.find((person) => person.name === body.name)
+  if (person.name && person.number && !checkRepeated) {
+    phones = phones.concat(person)
+    return response.json(person)
+  } else {
+    response.status(400).json({ error: 'name must be unique' })
+  }
 })
+
 const PORT = 3001
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
