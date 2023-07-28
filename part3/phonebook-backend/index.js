@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const phones = [
+let phones = [
   {
     id: 1,
     name: 'Arto Hellas',
@@ -43,6 +43,12 @@ app.get('/api/persons/:id', (request, response) => {
     response.statusMessage = 'No such id'
     response.status(404).end()
   }
+})
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  phones = phones.filter((person) => person.id !== id)
+
+  response.status(204).end()
 })
 const PORT = 3001
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
