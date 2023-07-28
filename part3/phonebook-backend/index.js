@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 let phones = [
   {
     id: 1,
@@ -23,6 +24,10 @@ let phones = [
   },
 ]
 const time = new Date()
+const generateid = () => {
+  const maxId = Math.max(...phones.map((person) => person.id))
+  return maxId + 1
+}
 
 app.get('/api/persons', (request, response) => {
   response.json(phones)
@@ -49,6 +54,16 @@ app.delete('/api/persons/:id', (request, response) => {
   phones = phones.filter((person) => person.id !== id)
 
   response.status(204).end()
+})
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+  const person = {
+    id: Math.floor(Math.random() * 200),
+    name: body.name,
+    number: body.number,
+  }
+  phones = phones.concat(person)
+  response.json(person)
 })
 const PORT = 3001
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
