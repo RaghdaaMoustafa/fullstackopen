@@ -16,7 +16,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+<<<<<<< HEAD
     "eject": "react-scripts eject"
+=======
+    "eject": "react-scripts eject",
+    "server": "json-server -p3001 --watch db.json"
+>>>>>>> 150391e (-part2e -2.18 create react app)
   },
   "eslintConfig": {
     "extends": [
