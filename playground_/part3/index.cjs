@@ -1,17 +1,12 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
-const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
-  next()
-}
-app.use(requestLogger)
+
+app.use(morgan('dev'))
 
 let notes = [
   {
@@ -38,14 +33,13 @@ let notes = [
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
-  
 })
 app.get('/api/notes', (request, response) => {
   response.json(notes)
 })
 app.get('/api/notes/:id', (request, response) => {
   const id = Number(request.params.id)
-  
+
   const note = notes.find((note) => {
     console.log(note.id, typeof note.id, id, typeof id, note.id === id)
     return note.id === id
