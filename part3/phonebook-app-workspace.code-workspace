@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "phonebook-backend"
+		},
+		{
+			"path": "../part2/phonebook"
+		}
+	],
+	"settings": {}
+}
