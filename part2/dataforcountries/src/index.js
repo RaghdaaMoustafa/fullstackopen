@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import ReactDom from 'react-dom/client'
 import App from './App'
 import './index.css'
@@ -23,3 +24,10 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 >>>>>>> 150391e (-part2e -2.18 create react app)
+=======
+import ReactDom from 'react-dom/client'
+import App from './App'
+import './index.css'
+
+ReactDom.createRoot(document.getElementById('root')).render(<App />)
+>>>>>>> 24dca5d (-part2e -2.18* init)
