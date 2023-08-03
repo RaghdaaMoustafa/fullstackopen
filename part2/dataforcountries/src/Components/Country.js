@@ -1,31 +1,57 @@
-const Country = ({ countriesToShow, filter }) => {
-  if (filter === '') {
-    return null
-  } else if (countriesToShow.length > 10) {
-    return <p>Too many matches,specify another filter</p>
-  } else if (countriesToShow.length === 1) {
-    return countriesToShow.map((element) => {
-      return (
+import { useState } from 'react'
+
+const Country = ({ c }) => {
+  const [showDetails, setShowDetails] = useState(false)
+  return (
+    <>
+      {showDetails ? (
         <>
-          <h1>{element.name.common}</h1>
+          <h1>{c.name.common}</h1>
           <p>
-            capital {element.capital} <br />
-            {element.area}
+            capital {c.capital} <br />
+            {c.area}
           </p>
           <h2>languages:</h2>
           <ul>
-            {Object.values(element.languages).map((item) => (
-              <li>{item}</li>
+            {Object.values(c.languages).map((item,i) => (
+              <li key={i}>{item}</li>
             ))}
           </ul>
-          <img src={element.flags.png} alt={element.flag.alt} />
+          <img src={c.flags.png} alt={c.flag.alt} />
+        </>
+      ) : (
+        <>{c.name.common}</>
+      )}
+      <button
+        onClick={() => {
+          setShowDetails(!showDetails)
+        }}
+      >
+        {showDetails ? 'no details' : 'details'}
+      </button>
+    </>
+  )
+}
+
+const Display = ({ countriesToShow, filter }) => {
+  if (filter === '') {
+    return null
+  }
+  const length = countriesToShow.length
+  return length > 10 ? (
+    <p>Too many matches,specify another filter</p>
+  ) : length === 1 ? (
+    <Country c={countriesToShow[0]} />
+  ) : (
+    countriesToShow.map((element, i) => {
+      return (
+        <>
+          <Country key={i} c={element} />
+          <br />
         </>
       )
     })
-  } else {
-    return countriesToShow.map((element) => {
-      return <li> element.name.common</li>
-    })
-  }
+  )
 }
-export default Country
+
+export default Display
