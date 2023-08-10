@@ -51,19 +51,14 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 app.post('/api/persons', (request, response) => {
-  const body = request.body
-  const person = {
-    id: Math.floor(Math.random() * 200),
-    name: body.name,
-    number: body.number,
-  }
-  const checkRepeated = phones.find((person) => person.name === body.name)
-  if (person.name && person.number && !checkRepeated) {
-    phones = phones.concat(person)
-    return response.json(person)
-  } else {
-    response.status(400).json({ error: 'name must be unique' })
-  }
+  const payload = request.body
+  const person = new Person({
+    name:payload.name,
+    number:payload.number,
+  })
+  console.log('payload :' , payload)
+  console.log('person :', person)
+  person.save().then((savedPhone) => response.json(savedPhone))
 })
 
 const PORT = process.env.PORT || 3001
