@@ -39,27 +39,36 @@ app.get('/api/persons/:id', (request, response) => {
     .then((phone) => {
       response.json(phone)
     })
-    .catch((error) => {
-      response.statusMessage = 'No such id'
-      response.status(404).end()
-    })
+    .catch((error) => next(error))
 })
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  phones = phones.filter((person) => person.id !== id)
-
-  response.status(204).end()
+  Person.findByIdAndRemove(request.params.id)
+    .then((deleted) => {
+      response.status(204).end()
+    })
+    .catch((error) => next(error))
 })
 app.post('/api/persons', (request, response) => {
   const payload = request.body
   const person = new Person({
-    name:payload.name,
-    number:payload.number,
+    name: payload.name,
+    number: payload.number,
   })
-  console.log('payload :' , payload)
+  console.log('payload :', payload)
   console.log('person :', person)
   person.save().then((savedPhone) => response.json(savedPhone))
 })
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
