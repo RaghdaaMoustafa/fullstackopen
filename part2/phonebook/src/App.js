@@ -71,16 +71,25 @@ const App = () => {
       }
       return
     }
-    personService.create(phoneObject).then((returnedPerson) => {
-      setPersons(persons.concat(returnedPerson))
-      setNewName('')
-      setNewNumber('')
-      setNameClass('success')
-      setSuccessMessage(`Added ${returnedPerson.name}`)
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 5000)
-    })
+    personService
+      .create(phoneObject)
+      .then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+        setNameClass('success')
+        setSuccessMessage(`Added ${returnedPerson.name}`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      })
+      .catch((error) => {
+        setNameClass('fail')
+        setSuccessMessage(error.response.data.error)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      })
   }
   const whenDelete = (id, person) => {
     if (window.confirm(`Delete ${person} ? `)) {
