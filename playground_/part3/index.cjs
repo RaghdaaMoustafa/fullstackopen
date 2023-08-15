@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express')
-const morgan = require('morgan')
+// const morgan = require('morgan')
 const Note = require('./models/note')
 
 const app = express()
@@ -30,17 +30,17 @@ app.get('/api/notes/:id', (request, response, next) => {
     .catch((error) => next(error))
 })
 
-app.delete('/api/notes/:id', (request, response) => {
+app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndRemove(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end()
     })
     .catch((error) => next(error))
 })
-const generateId = () => {
-  const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0
-  return maxId + 1
-}
+// const generateId = () => {
+//   const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0
+//   return maxId + 1
+// }
 // app.put('/api/notes/:id', (request, response, next) => {
 //   const body = request.body
 
