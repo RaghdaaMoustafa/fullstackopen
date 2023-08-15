@@ -14,11 +14,11 @@ morgan.token('body', (req) => {
 
 app.use(morgan(':method :url :body'))
 
-const time = new Date()
-const generateid = () => {
-  const maxId = Math.max(...phones.map((person) => person.id))
-  return maxId + 1
-}
+// const time = new Date()
+// const generateid = () => {
+//   const maxId = Math.max(...phones.map((person) => person.id))
+//   return maxId + 1
+// }
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then((person) => {
@@ -34,16 +34,16 @@ app.get('/info', (request, response) => {
     )
   })
 })
-app.get('/api/persons/:id', (request, response,next) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then((phone) => {
       response.json(phone)
     })
     .catch((error) => next(error))
 })
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then((deleted) => {
+    .then(() => {
       response.status(204).end()
     })
     .catch((error) => next(error))
