@@ -13,7 +13,7 @@ const blogSchema = new mongoose.Schema({
 const Blog = mongoose.model('Blog', blogSchema)
 
 const mongoUrl =
-  'mongodb+srv://raghdamustafa:asfor7abibalbomo@cluster0.bintyzv.mongodb.net/bloglistApp?retryWrites=true&w=majority'
+  'mongodb+srv://raghdamustafa:password@cluster0.bintyzv.mongodb.net/bloglistApp?retryWrites=true&w=majority'
 mongoose.set('strictQuery', false)
 mongoose
   .connect(mongoUrl)
