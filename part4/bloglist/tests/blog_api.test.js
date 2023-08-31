@@ -58,6 +58,26 @@ test('verify that the unique identifier property of the blog posts is named id',
   console.log(id)
   expect(id).toBeDefined()
 })
+test('a new blog post can be made', async () => {
+  const newBlog = {
+    _id: '5a422bc61b54a676234d17fc',
+    title: 'Type wars',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    likes: 2,
+    __v: 0,
+  }
+  console.log(newBlog)
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/Blogs')
+  console.log(response.body)
+  expect(response.body).toHaveLength(initialBlogs.length + 1)
+})
 afterAll(async () => {
   await mongoose.connection.close()
 })
