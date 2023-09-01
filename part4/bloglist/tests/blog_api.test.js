@@ -85,6 +85,22 @@ test('default value of like property to 0', async () => {
 
   expect(response.body.likes).toBe(0)
 })
+test('title missing', async () => {
+  const newBlog = {
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    likes: 3,
+  }
+  await api.post('/api/blogs').send(newBlog).expect(400)
+})
+test('url missing', async () => {
+  const newBlog = {
+    title: 'raghad me',
+    author: 'Robert C. Martin',
+    likes: 3,
+  }
+  await api.post('/api/blogs').send(newBlog).expect(400)
+})
 afterAll(async () => {
   await mongoose.connection.close()
 })
