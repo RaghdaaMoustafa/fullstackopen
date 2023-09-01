@@ -101,6 +101,16 @@ test('url missing', async () => {
   }
   await api.post('/api/blogs').send(newBlog).expect(400)
 })
+
+test('deleting a post', async () => {
+  const response = await api.get('/api/blogs')
+  const deletedBlogId = response.body[0].id
+  await api.delete(`/api/blogs/${deletedBlogId}`).expect(204)
+  const remainedBlogs = await api.get('/api/blogs')
+  expect(remainedBlogs.body).toHaveLength(initialBlogs.length - 1)
+  const titles = remainedBlogs.body.map((blog) => blog.title)
+  expect(titles).not.toContain('React patterns')
+})
 afterAll(async () => {
   await mongoose.connection.close()
 })
