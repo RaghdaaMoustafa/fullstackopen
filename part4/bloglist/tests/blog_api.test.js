@@ -111,6 +111,17 @@ test('deleting a post', async () => {
   const titles = remainedBlogs.body.map((blog) => blog.title)
   expect(titles).not.toContain('React patterns')
 })
+test('updating a blog', async () => {
+  const updateBlog = {
+    title: 'iam arse',
+  }
+  const response = await api.get('/api/blogs')
+  await api.put(`/api/blogs/${response.body[0].id}`).send(updateBlog)
+  const updatedBlogs = await api.get('/api/blogs')
+  // const titles = updatedBlogs.body.map((blog) => blog.title)
+  // expect(titles).toContain('iam arse')
+  expect(updatedBlogs.body[0].title).toBe('iam arse')
+})
 afterAll(async () => {
   await mongoose.connection.close()
 })
