@@ -1,5 +1,4 @@
 const blogRouter = require('express').Router()
-const { request, response } = require('../app')
 const Blog = require('../models/blog')
 
 blogRouter.get('/', (request, response) => {
@@ -15,6 +14,7 @@ blogRouter.post('/', async (request, response) => {
     author: payload.author,
     url: payload.url,
     likes: payload.likes,
+    
   })
   // console.log('payload: ', payload)
   // console.log('blog: ', blog)
