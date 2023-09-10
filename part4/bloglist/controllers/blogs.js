@@ -2,6 +2,7 @@ const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const { userExtractor } = require('../utils/middleware')
 
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -15,40 +16,33 @@ const getTokenFrom = (request) => {
   return null
 }
 
-blogRouter.post('/', async (request, response) => {
+blogRouter.post('/', userExtractor, async (request, response) => {
   const payload = request.body
   console.log(payload)
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
-  }
-  const user = await User.findById(decodedToken.id)
+  const user = request.user
+  const blogUser = await User.findById(user.id)
 
   const blog = new Blog({
     title: payload.title,
     author: payload.author,
     url: payload.url,
     likes: payload.likes,
-    user: user.id,
+    user: blogUser.id,
   })
   // console.log('payload: ', payload)
   // console.log('blog: ', blog)
   // const blog = new Blog(request.body)
   const savedBlog = await blog.save()
   console.log(savedBlog)
-  user.blogs = user.blogs.concat(savedBlog._id)
-  await user.save()
+  blogUser.blogs = blogUser.blogs.concat(savedBlog._id)
+  await blogUser.save()
   response.status(201).json(savedBlog)
 })
-blogRouter.delete('/:id', async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  console.log(decodedToken)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
-  }
+blogRouter.delete('/:id', userExtractor, async (request, response) => {
+  const user = request.user
   const blog = await Blog.findById(request.params.id)
   console.log(blog)
-  if (!(blog.user.toString() === decodedToken.id.toString())) {
+  if (!(blog.user.toString() === user.id.toString())) {
     return response.status(400).json({ error: 'invalid user' })
   }
 
