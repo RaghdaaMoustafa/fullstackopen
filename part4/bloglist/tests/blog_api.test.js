@@ -55,64 +55,137 @@ test('verify that the unique identifier property of the blog posts is named id',
   console.log(id)
   expect(id).toBeDefined()
 })
-test('a new blog post can be made', async () => {
-  const newBlog = {
-    title: 'Type wars',
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-    likes: 2,
-  }
-  console.log(newBlog)
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/Blogs')
-  console.log(response.body)
-  expect(response.body).toHaveLength(initialBlogs.length + 1)
-})
-test('default value of like property to 0', async () => {
-  const newBlog = {
-    title: 'raghad me',
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-  }
-  console.log(newBlog)
-  const response = await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
+let token = ''
+describe('addition of a new note', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+    await user.save()
+    const loginUser = {
+      username: 'root',
+      password: 'sekret',
+    }
+    const response = await api.post('/api/login').send(loginUser)
+    console.log(response.body)
+    token = response.body.token
+  })
 
-  expect(response.body.likes).toBe(0)
-})
-test('title missing', async () => {
-  const newBlog = {
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-    likes: 3,
-  }
-  await api.post('/api/blogs').send(newBlog).expect(400)
-})
-test('url missing', async () => {
-  const newBlog = {
-    title: 'raghad me',
-    author: 'Robert C. Martin',
-    likes: 3,
-  }
-  await api.post('/api/blogs').send(newBlog).expect(400)
+  test('a new blog post can be made', async () => {
+    const newBlog = {
+      title: 'Type wars',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+      likes: 2,
+    }
+    console.log(newBlog)
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('authorization', `Bearer ${token}`)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/Blogs')
+    console.log(response.body)
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+  })
+
+  test('adding new blog without a token', async () => {
+    const newBlog = {
+      title: 'a blog without token',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+      likes: 2,
+    }
+    console.log(newBlog)
+    await api.post('/api/blogs').send(newBlog).expect(401)
+  })
+
+  test('default value of like property to 0', async () => {
+    const newBlog = {
+      title: 'raghad me',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    }
+    console.log(newBlog)
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('authorization', `Bearer ${token}`)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body.likes).toBe(0)
+  })
+  test('title missing', async () => {
+    const newBlog = {
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+      likes: 3,
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('authorization', `Bearer ${token}`)
+      .expect(400)
+  })
+  test('url missing', async () => {
+    const newBlog = {
+      title: 'raghad me',
+      author: 'Robert C. Martin',
+      likes: 3,
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('authorization', `Bearer ${token}`)
+      .expect(400)
+  })
 })
 
-test('deleting a post', async () => {
-  const response = await api.get('/api/blogs')
-  const deletedBlogId = response.body[0].id
-  await api.delete(`/api/blogs/${deletedBlogId}`).expect(204)
-  const remainedBlogs = await api.get('/api/blogs')
-  expect(remainedBlogs.body).toHaveLength(initialBlogs.length - 1)
-  const titles = remainedBlogs.body.map((blog) => blog.title)
-  expect(titles).not.toContain('React patterns')
+let blogs = ''
+describe('delete api', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+    await user.save()
+    const loginUser = {
+      username: 'root',
+      password: 'sekret',
+    }
+    const response = await api.post('/api/login').send(loginUser)
+    console.log(response.body)
+    token = response.body.token
+
+    const newBlog = {
+      title: 'blog to be deleted',
+      author: 'raghad',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    }
+    console.log(newBlog)
+    const blogToDelete = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('authorization', `Bearer ${token}`)
+
+    blogs = initialBlogs.concat(blogToDelete.body)
+  })
+  test('deleting a post', async () => {
+    const response = await api.get('/api/blogs')
+    const length = response.body.length - 1
+    const deletedBlogId = response.body[length].id
+    await api
+      .delete(`/api/blogs/${deletedBlogId}`)
+      .set('authorization', `Bearer ${token}`)
+      .expect(204)
+    const remainedBlogs = await api.get('/api/blogs')
+    expect(remainedBlogs.body).toHaveLength(blogs.length - 1)
+    const titles = remainedBlogs.body.map((blog) => blog.title)
+    expect(titles).not.toContain('blog to be deleted')
+  })
 })
 test('updating a blog', async () => {
   const updateBlog = {
