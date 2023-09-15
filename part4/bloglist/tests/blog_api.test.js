@@ -145,7 +145,7 @@ describe('addition of a new note', () => {
   })
 })
 
-let blogs = ''
+// let blogs = ''
 describe('delete api', () => {
   beforeEach(async () => {
     await User.deleteMany({})
@@ -171,7 +171,7 @@ describe('delete api', () => {
       .send(newBlog)
       .set('authorization', `Bearer ${token}`)
 
-    blogs = initialBlogs.concat(blogToDelete.body)
+    // blogs = initialBlogs.concat(blogToDelete.body)
   })
   test('deleting a post', async () => {
     const response = await api.get('/api/blogs')
@@ -182,7 +182,7 @@ describe('delete api', () => {
       .set('authorization', `Bearer ${token}`)
       .expect(204)
     const remainedBlogs = await api.get('/api/blogs')
-    expect(remainedBlogs.body).toHaveLength(blogs.length - 1)
+    expect(remainedBlogs.body).toHaveLength(initialBlogs.length)
     const titles = remainedBlogs.body.map((blog) => blog.title)
     expect(titles).not.toContain('blog to be deleted')
   })
