@@ -150,6 +150,11 @@ const App = () => {
       <button type="submit">save</button>
     </form>
   )
+  const handleLogout = (event) => {
+    event.preventDefault()
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
+  }
 
   return (
     <div>
@@ -162,6 +167,7 @@ const App = () => {
       {user && (
         <div>
           <p>{user.name} logged in</p>
+          <button onClick={handleLogout}>logout</button>
           {noteForm()}
         </div>
       )}
