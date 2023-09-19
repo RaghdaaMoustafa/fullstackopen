@@ -4,7 +4,7 @@
 			"path": "bloglist"
 		},
 		{
-			"path": "bloglist-frontend"
+			"path": "../part5/bloglist-frontend"
 		}
 	],
 	"settings": {}
