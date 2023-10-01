@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import BlogForm from './components/BlogForm'
 
 const Notification = ({ message, className }) => {
   if (message === null) {
@@ -101,40 +102,19 @@ const App = () => {
       setNotification(null)
     }, 5000)
   }
-  const handleNewBlog = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        title
-        <input
-          type="text"
-          value={title}
-          name="Title"
-          onChange={({ target }) => {
-            setTitle(target.value)
-          }}
-        />
-      </div>
-      <div>
-        author
-        <input
-          type="text"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url
-        <input
-          type="text"
-          value={url}
-          name="Url"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
-  )
+  const handleNewBlog = () => {
+    return (
+      <BlogForm
+        onSubmit={addBlog}
+        title={title}
+        author={author}
+        url={url}
+        handleTitleChange={({ target }) => setTitle(target.value)}
+        handleAuthorChange={({ target }) => setAuthor(target.value)}
+        handleUrlChange={({ target }) => setUrl(target.value)}
+      />
+    )
+  }
 
   return (
     <div>
