@@ -20,6 +20,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -86,6 +87,7 @@ const App = () => {
   }
   const addBlog = async (event) => {
     event.preventDefault()
+    setVisible(false)
     const blogObject = {
       title,
       author,
@@ -103,16 +105,26 @@ const App = () => {
     }, 5000)
   }
   const handleNewBlog = () => {
+    const hideWhenVisible = { display: visible ? 'none' : '' }
+    const showWhenVisible = { display: visible ? '' : 'none' }
     return (
-      <BlogForm
-        onSubmit={addBlog}
-        title={title}
-        author={author}
-        url={url}
-        handleTitleChange={({ target }) => setTitle(target.value)}
-        handleAuthorChange={({ target }) => setAuthor(target.value)}
-        handleUrlChange={({ target }) => setUrl(target.value)}
-      />
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setVisible(true)}>new blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <BlogForm
+            onSubmit={addBlog}
+            title={title}
+            author={author}
+            url={url}
+            handleTitleChange={({ target }) => setTitle(target.value)}
+            handleAuthorChange={({ target }) => setAuthor(target.value)}
+            handleUrlChange={({ target }) => setUrl(target.value)}
+          />
+          <button onClick={() => setVisible(false)}>cancel</button>
+        </div>
+      </div>
     )
   }
 
