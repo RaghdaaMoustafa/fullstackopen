@@ -124,13 +124,15 @@ const App = () => {
       <h2>create new</h2>
       {handleNewBlog()}
 
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          increaseLikes={() => increaseLikesOf(blog.id)}
-        />
-      ))}
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            increaseLikes={() => increaseLikesOf(blog.id)}
+          />
+        ))}
     </div>
   )
 }
