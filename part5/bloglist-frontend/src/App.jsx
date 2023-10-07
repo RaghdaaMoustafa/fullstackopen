@@ -110,6 +110,14 @@ const App = () => {
     const response = await blogService.update(id, changedBlog)
     setBlogs(blogs.map((blog) => (blog.id !== id ? blog : response)))
   }
+  const deleteBlogOf = async (id) => {
+    const blog = blogs.find((blog) => blog.id === id)
+    const updatedBlogs = blogs.filter((blog) => blog.id !== id)
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      await blogService.deleteBlog(id)
+      setBlogs(updatedBlogs)
+    }
+  }
 
   return (
     <div>
@@ -131,6 +139,7 @@ const App = () => {
             key={blog.id}
             blog={blog}
             increaseLikes={() => increaseLikesOf(blog.id)}
+            removeBlog={() => deleteBlogOf(blog.id)}
           />
         ))}
     </div>
